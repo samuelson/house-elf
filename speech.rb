@@ -1,4 +1,4 @@
-require 'pocketsphinx-ruby' # Omitted in subsequent examples
+require 'pocketsphinx-ruby'
 
 listening_keyword = "House elf"
 
@@ -12,16 +12,16 @@ command_list = {
 	"Forget it" => "Forgotten"
 }
 
+puts "Availible Commands:"
+command_list.each do |key, value|
+		puts key
+end
+
 configuration = Pocketsphinx::Configuration::Grammar.new do
 	sentence listening_keyword
 	command_list.each do |key, value|
 		sentence key
 	end
-end
-
-puts "Availible Commands:"
-command_list.each do |key, value|
-		puts key
 end
 
 recognizer = Pocketsphinx::LiveSpeechRecognizer.new(configuration)
