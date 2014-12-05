@@ -1,4 +1,5 @@
 require 'pocketsphinx-ruby'
+require 'socket'
 
 #Phrase to listen for
 listening_keyword = "house elf"
@@ -6,12 +7,12 @@ listening_keyword = "house elf"
 command_list = {
 	listening_keyword => "Listening",
   "living room light" => "pl a1 on",
-  "Turn off living room light" => "pl a1 off",
+  "turn off living room light" => "pl a1 off",
   "bedroom light" => "pl a2 on",
-  "Turn off bedroom light" => "pl a2 off",
-  "Play music" => "PM",
-  "Stop music" => "SM",
-	"Forget it" => "Forgotten"
+  "turn off bedroom light" => "pl a2 off",
+  "play music" => "PM",
+  "stop music" => "SM",
+	"forget it" => "Forgotten"
 }
 
 puts "Availible Commands:"
@@ -30,13 +31,14 @@ configuration['vad_threshold'] = 3
 
 recognizer = Pocketsphinx::LiveSpeechRecognizer.new(configuration)
 
+s=TCPSocket.open("10.0.0.42",1099)
 
 #By default don't listen for anything but
 listening = false
 recognizer.recognize do |speech|
 	if listening then
-		puts command_list[speech]
-		puts speech
+
+		s.puts command_list[speech]				
 
 		#Stop listening after the command is done
 		listening = false
