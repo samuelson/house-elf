@@ -1,8 +1,10 @@
 require 'pocketsphinx-ruby'
 
-listening_keyword = "House elf"
+#Phrase to listen for
+listening_keyword = "house elf"
 
 command_list = {
+	listening_keyword => "Listening",
   "living room light" => "pl a1 on",
   "Turn off living room light" => "pl a1 off",
   "bedroom light" => "pl a2 on",
@@ -24,6 +26,8 @@ configuration = Pocketsphinx::Configuration::Grammar.new do
 	end
 end
 
+configuration['vad_threshold'] = 3
+
 recognizer = Pocketsphinx::LiveSpeechRecognizer.new(configuration)
 
 
@@ -39,5 +43,6 @@ recognizer.recognize do |speech|
 	end
 
 	#If you hear the word, start listening for the next round
-	listening = true if speech == listening_keyword
+	listening = true if speech == listening_keyword.downcase
+	puts listening
 end
